@@ -24,7 +24,7 @@ import getopt
 print " PastedLeaks CLI"
 print "    based on Goofile by T.Richards"
 print "    and http://reflets.info/monkey-tools-reflets-vous-offre-pastedleaks/"
-print "  code.google.com/p/goofile"
+print "  https://github.com/Oblady/PastedLeaks-CLI/"
 print " ---\n\n"
 
 global result
@@ -33,7 +33,7 @@ result =[]
 def usage():
 	print "PastedLeaks CLI"
 	print "usage: pastedleaks options"
-	print "       -q: terme to search"
+	print "       -q: terms to search"
 	print "example: ./pastedleaks.py -q interest"
 	sys.exit()
 
