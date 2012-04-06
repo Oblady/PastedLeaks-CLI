@@ -24,7 +24,7 @@ import getopt
 print " PastedLeaks CLI"
 print "    based on Goofile by T.Richards"
 print "    and http://reflets.info/monkey-tools-reflets-vous-offre-pastedleaks/"
-print "  code.google.com/p/goofile"
+print "  https://github.com/Oblady/PastedLeaks-CLI/"
 print " ---\n\n"
 
 global result
@@ -32,12 +32,11 @@ result =[]
 
 def usage():
 	print "PastedLeaks CLI"
-	print "usage: pastedleaks options"
-	print "       -q: terme to search"
-	print "example: ./pastedleaks.py -q interest"
+	print "usage: pastedleaks terms"
+	print "example: ./pastedleaks.py \"terms\" \"of interest\""
 	sys.exit()
 
-def run(userSearch, limit):
+def run(userSearch):
 	#h = httplib.HTTP('www.google.com')
 	h = httplib.HTTPS('encrypted.google.com')
 	h.putrequest('GET',"/search?num=500&q="+ userSearch +"+site:pastebin.com+OR+site:friendpaste.com+OR+site:pastebay.com+OR+site:pastebin.ca")
@@ -54,44 +53,28 @@ def run(userSearch, limit):
 	
 	r1 = re.compile('[a-zA-Z0-9]*paste[a-zA-Z0-9]*\.c[oma]+/[a-zA-Z0-9_-]{2,}')
 	res = r1.findall(data)
+	
 	return res 
 	
 
 def search(argv):
-	global limit
-	limit = 100
-	if len(sys.argv) < 1: 
-		usage() 
-	try :
-	      opts, args = getopt.getopt(argv,"q:l:")
- 
-	except getopt.GetoptError:
+
+	userSearch = '+'.join(argv)
+	if len(userSearch) < 3:
 		usage()
-		sys.exit()
-	
-	for opt,arg in opts :
-		if opt == '-q':
-			userSearch=arg
-		elif opt == '-l':
-			limit=arg
-	
+
 	print "Searching for "+ userSearch
-	print "========================================"
+	print "========================================\n"
 
+	print "Pasted data found:"
+	print "===================="
 
-	cant = 0
-
-	#while cant < limit:
-	res = run(userSearch,limit)
+	res = run(userSearch)
 
 	for x in res:
 		if result.count(x) == 0:
 			result.append(x)
-		#cant+=100
 			
-
-	print "\nPasted data found:"
-	print "====================\n"
 	t=0
 	if result==[]:
 		print "No results were found"
@@ -101,7 +84,8 @@ def search(argv):
 			x= re.sub('</li>','',x)
 			print "http://"+x
 			t+=1
-	print "====================\n"
+	print "===================="
+	print "Total found: "+str(t)+"\n"
 	
 
 if __name__ == "__main__":
@@ -110,3 +94,4 @@ if __name__ == "__main__":
 		print "Search interrupted by user.."
 	except:
 		sys.exit()
+
